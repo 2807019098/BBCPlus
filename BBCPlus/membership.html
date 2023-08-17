@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,viewport-fit=cover, initial-scale=1.0, maximum-scale=1.0,user-scalable=0" />
+		<meta name="applicable-device" content="pc,mobile"/>
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="apple-touch-fullscreen" content="yes"/>
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+		<meta name="format-detection" content="telephone=no"/>
+		<meta http-equiv="X-UA-Compatible" content="edge">
+		<meta name="x5-fullscreen" content="true">
+		<meta name="full-screen" content="yes">
+		<link rel="apple-touch-icon" type="image/jpg" href="images/list.png">
+		<link rel="icon" type="image/jpg" href="images/list.png">
+		<link rel="stylesheet" href="css/base.css" />
+		<script src="js/flexible.js"></script>
+		<script type="module">
+			import { MHead, GoBack } from "./compontents/header/index.js";
+			const title = "麦德龙付费会员开通";
+			document.querySelector("header").innerHTML = `${MHead(title)}`;
+			document.querySelector("header a").onclick = function () {
+				GoBack();
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container" membership>
+			<header></header>
+			<section class="main">
+				<div class="tips-txt">为了保障您的付费会员权益，需要您完善以下信息：</div>
+				<div id="dialogBox"></div>
+			</section>
+		</div>
+		<template id="temp">
+			<div class="dialogBox">
+				<section>
+					<div class="line-box flex-row-justify-start">
+						<div class="input">
+							<b>姓</b>
+							<input class="regInput" id="lastName" type="text" placeholder="请输入您的姓" />
+							<span></span>
+						</div>
+					</div>
+					<div class="line-box flex-row-justify-start">
+						<div class="input">
+							<b>名</b>
+							<input class="regInput" id="firstName" type="text" placeholder="请输入您的名" />
+							<span></span>
+						</div>
+					</div>
+					<div class="line-box flex-row-justify-start">
+						<div class="input">
+							<b>手机号</b>
+							<input class="regInput" id="mobile" type="tel" value="18912348900" maxlength="11" placeholder="请输入您的手机号" readonly />
+							<span></span>
+						</div>
+					</div>
+					<div class="line-box flex-row-justify-start">
+						<div class="input">
+							<b>身份证</b>
+							<input class="regInput" id="identityCard" type="text" maxlength="18" placeholder="请输入您的身份证号" />
+							<span></span>
+						</div>
+					</div>
+					<div class="line-box flex-row-justify-start">
+						<div class="input">
+							<b>开通商场</b>
+							<input class="regInput" id="mobile" type="text" value="上海普陀商场" maxlength="11" placeholder="请选择开通商场" readonly />
+							<span></span>
+						</div>
+					</div>
+				</section>
+				<div class="line-btn flex-row-justify-start">
+					<button class="login-button flex-row-center" type="button" id="login-button" onclick="getSubmit()">确认信息并继续开通</button>
+				</div>
+				<div class="line-bottom flex-row-justify-start">
+					<div class="checkbox-group">
+						<input type="checkbox" value="" id="checkbox" />
+					</div>
+					<div class="line-bottom-desc">
+						<div class="info">
+							<span>点击即同意</span>
+							<a href="">《麦德龙会员协议》</a>
+							<a href="">《麦德龙个人信息保护及隐私政策》</a>
+							<a href="">《麦德龙授权协议》</a>
+							<a href="">《麦德龙儿童个人信息保护规则及监护人须知》</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+		<script src="js/jquery-3.1.1.min.js"></script>
+		<script src="js/common.js"></script>
+		<script>
+   	
+			document.body.addEventListener('touchmove', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+			}, { passive: false });
+
+			const myTemplate = () => { 
+				const template = document.querySelector("template");
+				if (template) {
+					const clone = template.content.cloneNode(true);
+					const dialogBox = document.querySelector("#dialogBox");
+					if (dialogBox) {
+						dialogBox.appendChild(clone);
+					}
+				}
+			};
+
+			myTemplate();
+
+			const inputLi = document.querySelectorAll(".regInput:not([readonly])");
+
+			let clearInput = false;
+
+			inputLi.forEach(dom => {
+				
+				dom.addEventListener("focus", function () {
+					this.parentElement.parentElement.classList.add("select");
+					let value = this.value;
+					if (value !== "") {
+						this.nextElementSibling.style.display = 'flex';
+					} else {
+						this.nextElementSibling.style.display = 'none';
+					}
+				});
+
+				dom.addEventListener("blur", function () {
+					this.parentElement.parentElement.classList.remove("select");
+					setTimeout(() => {
+						if (!clearInput) {
+							this.nextElementSibling.style.display = 'none';
+						}
+						clearInput = false;
+					}, 100)
+					
+				});
+
+				dom.addEventListener("input", function () {
+					let value = this.value;
+					if (value !== "") {
+						this.nextElementSibling.style.display = 'flex';
+					} else {
+						this.nextElementSibling.style.display = 'none';
+					}
+
+				});
+
+				dom.nextElementSibling.addEventListener('click', function (event) {
+					this.previousElementSibling.value = '';
+					this.style.display = 'none';
+					clearInput = true;
+					event.stopPropagation();
+				})
+				
+			});
+
+			document.querySelector("#checkbox").addEventListener('change', function (event) {
+				document.querySelector("#checkbox").classList.remove("checkFocus");
+				if (Boolean(event.target.checked)) {
+					this.setAttribute("checked", '');
+				} else {
+					this.removeAttribute("checked");
+				}
+			});
+
+			const getSubmit = Throttle(() => {
+				let lastName = document.querySelector("#lastName").value;
+				let firstName = document.querySelector("#firstName").value;
+				let identityCard = document.querySelector("#identityCard").value;
+				let idreg = /^[1-9][0-9]{5}(19|20)[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}([0-9]|x|X)$/;
+				const checkBtn = document.querySelector('#checkbox');
+
+				if (lastName === "") {
+					Toast('姓不能为空，请填写', 1000);
+					document.querySelector("#lastName").focus();
+				} else if (firstName === "") {
+					Toast('名不能为空，请填写', 1000);
+					document.querySelector("#firstName").focus();
+				} else if (identityCard === "") {
+					Toast('身份证不能为空，请填写', 1000);
+					document.querySelector("#identityCard").focus();
+				} else if (!idreg.test(identityCard)) {
+					Toast('身份证号不正确，请重新填写', 1000);
+					document.querySelector("#identityCard").focus();
+				} else if (checkBtn.checked === false) {
+					Toast('请勾选并同意协议', 1000);
+					document.querySelector("#checkbox").classList.add("checkFocus");
+				} else {
+					setPost();
+				}
+			}, 1500);
+
+			const waitLoading = () => {
+				const loginBtn = document.querySelector("#login-button");
+				loginBtn.setAttribute('disabled', true);
+				loginBtn.textContent = "确认信息并继续开通";
+				loginBtn.style.backgroundColor = "rgb(0 91 172 / 70%)";
+				setPost();
+			};
+
+			/**
+			 *ajax请求
+			*
+			*/
+			const setPost = () => {
+				// 模拟请求延迟
+				try {		
+
+					setTimeout(() => {
+						$.ajax({
+							url: "",
+							type: "POST",
+							data: {
+
+							},
+							dataType: "json",
+							async: false,
+							success: function() {
+								waitEnd();
+								Toast('提交成功', 1000);
+							},
+							error: function() {
+								waitEnd();
+								Toast('模拟请求失败', 1000);
+							},
+							complete: function() {
+								waitEnd();
+							}
+						})
+					}, 1000);
+
+				} catch (error) {
+					console.log(error)
+				}
+			};
+
+			const waitEnd = () => {
+				const loginBtn = document.querySelector("#login-button");
+				loginBtn.removeAttribute("disabled");
+				loginBtn.textContent = "确认信息并继续开通";
+				loginBtn.style.backgroundColor = "var(--rv-button-background-color)";
+			};
+
+		</script>
+		
+	</body>
+</html>

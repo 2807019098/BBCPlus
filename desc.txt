@@ -1,0 +1,62 @@
+Dialog({
+    title: '提 示',
+    content: `<p>账号异常，请联系客服</p><p>400-1518-518</p>`,
+    confirmButtonText: '去注册',
+    onConfirm: function () {
+        // 
+    },
+})
+
+Dialog({
+    title: '提 示',
+    content: `<p>您已参加过该活动</p>`,
+    confirmButtonText: '确定',
+    onConfirm: function () {
+        // 
+    },
+})
+
+Dialog({
+    title: '提 示',
+    content: `<p>请完善身份信息后重试</p>`,
+    confirmButtonText: '去完善',
+    onConfirm: function () {
+        // 
+    },
+})
+
+Dialog({
+    title: '提 示',
+    content: `<p>您提交的信息有误</p><p>请核对后重新提交</p>`,
+    confirmButtonText: '确定',
+    onConfirm: function () {
+        // 
+    },
+})
+
+Dialog({
+    title: '提 示',
+    content: `<p>您还不是麦德龙个人卡会员</p><p>请先注册</p>`,
+    confirmButtonText: '去注册',
+    onConfirm: function () {
+        // 
+    },
+})
+
+Dialog({
+    title: '提 示',
+    content: `<p>当前卡未到续费时间</p><p>请于xxxx年xx月xx日再激活</p>`,
+    confirmButtonText: '确定',
+    onConfirm: function () {
+        // 
+    },
+})
+
+Dialog({
+    title: '提 示',
+    content: `<p>活动已结束</p>`,
+    confirmButtonText: '确定',
+    onConfirm: function () {
+        // 
+    },
+})

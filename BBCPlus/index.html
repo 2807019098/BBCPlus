@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,viewport-fit=cover, initial-scale=1.0, maximum-scale=1.0,user-scalable=0" />
+		<meta name="applicable-device" content="pc,mobile"/>
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="apple-touch-fullscreen" content="yes"/>
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+		<meta name="format-detection" content="telephone=no"/>
+		<meta http-equiv="X-UA-Compatible" content="edge">
+		<meta name="x5-fullscreen" content="true">
+		<meta name="full-screen" content="yes">
+		<link rel="apple-touch-icon" type="image/jpg" href="images/list.png">
+		<link rel="icon" type="image/jpg" href="images/list.png">
+		<link rel="stylesheet" href="css/base.css" />
+		<script src="js/flexible.js"></script>
+		<script type="module">
+			import { MHead, GoBack } from "./compontents/header/index.js";
+			const title = "激活PLUS会员享权益";
+			document.querySelector("header").innerHTML = `${MHead(title)}`;
+			document.querySelector("header a").onclick = function () {
+				GoBack();
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container" home>
+			<header></header>
+			<section class="main">
+				<img src="images/introduce-bg.png" />
+				<div id="dialogBox"></div>
+			</section>
+		</div>
+		<!-- 登录模板 -->
+		<template id="temp">
+			<div class="dialogBox">
+				<form>
+					<section>
+						<div class="line-box flex-row-justify-start">
+							<div class="input">
+								<input class="regInput" id="mobile" type="tel" maxlength="11" placeholder="请输入您的手机号" />
+								<span></span>
+							</div>
+						</div>
+						<div class="line-box flex-row-justify-start">
+							<div class="input">
+								<input class="regInput" id="sms" type="text" placeholder="请输入验证码" />
+								<span></span>
+							</div>
+							<input class="sms-button" id="SendCode" type="button" value="获取验证码" onclick="checkSms()" />
+						</div>
+						<div class="line-box flex-row-justify-start">
+							<button class="login-button flex-row-center" type="button" disabled id="login-button" onclick="getSubmit()">提交</button>
+						</div>
+					</section>
+					<div class="line-bottom flex-row-justify-start">
+						<div class="checkbox-group">
+							<input type="checkbox" value="" id="checkbox" />
+						</div>
+						<div class="line-bottom-desc">
+							<div class="info">
+								<span>点击即同意</span>
+								<a href="">《麦德龙会员协议》</a>
+								<a href="">《麦德龙个人信息保护及隐私政策》</a>
+								<a href="">《麦德龙授权协议》</a>
+								<a href="">《麦德龙儿童个人信息保护规则及监护人须知》</a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</template>
+		<script src="js/jquery-3.1.1.min.js"></script>
+		<script src="js/common.js"></script>
+		<script>
+   	Dialog({
+    title: '提 示',
+    content: `<p>您还不是麦德龙个人卡会员</p>`,
+    confirmButtonText: '去注册',
+    onConfirm: function () {
+        alert()
+    },
+})
+			document.body.addEventListener('touchmove', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+			}, { passive: false });
+
+			const myTemplate = () => { 
+				const template = document.querySelector("template");
+				if (template) {
+					const clone = template.content.cloneNode(true);
+					const dialogBox = document.querySelector("#dialogBox");
+					if (dialogBox) {
+						dialogBox.appendChild(clone);
+					}
+				}
+			};
+
+			myTemplate();
+
+			const inputLi = document.querySelectorAll(".regInput");
+
+			let clearInput = false;
+
+			inputLi.forEach(dom => {
+				
+				dom.addEventListener("focus", function () {
+					this.parentElement.parentElement.classList.add("select");
+					console.log(this.value)
+					let value = this.value;
+					if (value !== "") {
+						this.nextElementSibling.style.display = 'flex';
+					} else {
+						this.nextElementSibling.style.display = 'none';
+					}
+				});
+
+				dom.addEventListener("blur", function () {
+					this.parentElement.parentElement.classList.remove("select");
+					setTimeout(() => {
+						if (!clearInput) {
+							this.nextElementSibling.style.display = 'none';
+						}
+						clearInput = false;
+					}, 100)
+					
+				});
+
+				dom.addEventListener("input", function () {
+					let value = this.value;
+					let mobile = document.querySelector("#mobile").value;
+					let phonereg = /^(((13[0-9]{1})|(15[0-9]{1})|(16[6]{1})|(17[0-9]{1})|(18[0-9]{1})|(19[8-9]{1}))+\d{8})$/;
+					let sms = document.querySelector("#sms").value;
+					
+					if (mobile !== "" && sms !== "" && phonereg.test(mobile)) {
+						document.querySelector("#login-button").removeAttribute("disabled");
+					} else {
+						document.querySelector("#login-button").setAttribute("disabled", true);
+					}
+
+					if (value !== "") {
+						this.nextElementSibling.style.display = 'flex';
+					} else {
+						this.nextElementSibling.style.display = 'none';
+					}
+
+				});
+
+				dom.nextElementSibling.addEventListener('click', function (event) {
+					this.previousElementSibling.value = '';
+					this.style.display = 'none';
+					clearInput = true;
+					event.stopPropagation();
+				})
+				
+			});
+
+			document.querySelector("#checkbox").addEventListener('change', function (event) {
+				document.querySelector("#checkbox").classList.remove("checkFocus");
+				if (Boolean(event.target.checked)) {
+					this.setAttribute("checked", '');
+				} else {
+					this.removeAttribute("checked");
+				}
+			});
+
+			const checkSms = Throttle(() => {
+				let mobile = $("#mobile").val();
+				let phonereg = /^(((13[0-9]{1})|(15[0-9]{1})|(16[6]{1})|(17[0-9]{1})|(18[0-9]{1})|(19[8-9]{1}))+\d{8})$/;
+				
+				if (mobile === ""){
+					Toast('请输入您的手机号', 1000);
+				} else if (!phonereg.test(mobile)){
+					Toast('手机号码不正确，请重新输入', 1000);
+				} else {
+					sendInfo();
+				}
+
+			}, 1500);
+
+			const getSubmit = Throttle(() => {
+				const checkBtn = document.querySelector('#checkbox');
+				if (checkBtn.checked) {
+					waitLoading();
+				} else {
+					Toast('请勾选并同意协议', 1000);
+					document.querySelector("#checkbox").classList.add("checkFocus");
+				}
+			}, 1500);
+
+			const waitLoading = () => {
+				const loginBtn = document.querySelector("#login-button");
+				loginBtn.setAttribute('disabled', true);
+				loginBtn.textContent = "提交中...";
+				loginBtn.style.backgroundColor = "rgb(0 91 172 / 70%)";
+				setPost();
+			};
+
+			/**
+			 *ajax请求
+			*
+			*/
+			const setPost = () => {
+				// 模拟请求延迟
+				try {
+					setTimeout(() => {
+						$.ajax({
+							url: "",
+							type: "POST",
+							data: {
+
+							},
+							dataType: "json",
+							async: false,
+							success: function() {
+								waitEnd();
+								Toast('提交成功', 1000);
+							},
+							error: function() {
+								waitEnd();
+								Toast('模拟请求失败', 1000);
+							},
+							complete: function() {
+								waitEnd();
+							}
+						})
+
+					}, 1000);
+				} catch (error) {
+					console.log(error)
+				}
+			};
+
+			const waitEnd = () => {
+				const loginBtn = document.querySelector("#login-button");
+				loginBtn.removeAttribute("disabled");
+				loginBtn.textContent = "提交";
+				loginBtn.style.backgroundColor = "var(--rv-button-background-color)";
+			};
+
+			/**
+			 *短信验证码
+			 *
+			 */
+			let InterValObj; //定时器变量，控制时间
+			const count = 60; //间隔函数，1秒执行
+			let curCount;//当前剩余秒数
+			let code = ""; //验证码
+			const codeLength = 6;//验证码长度
+
+			const sendInfo = () => {
+				curCount = count;
+				generateCode();
+    			disableSendButton();
+				InterValObj = window.setInterval(setResetTime, 1000);
+			};
+
+			const generateCode = () => {
+				code = "";
+				for (let i = 0; i < codeLength; i++) {
+					code += parseInt(Math.random() * 9).toString();
+				}
+			};
+
+			const disableSendButton = () => {
+				const sendCodeButton = document.querySelector("#SendCode");
+				sendCodeButton.setAttribute("disabled", true);
+				sendCodeButton.value = `${curCount}秒后再获取`;
+			};
+
+			const enableSendButton = () => {
+				const sendCodeButton = document.querySelector("#SendCode");
+				sendCodeButton.removeAttribute("disabled");
+				sendCodeButton.value = '获取验证码';
+			};
+			
+			const setResetTime = () => {
+				if (curCount === 0) {                
+					clearInterval(InterValObj);
+					enableSendButton();
+        			code = "";
+				}else {
+					curCount--;
+        			updateSendButtonText();
+				}
+			}
+
+			const updateSendButtonText = () => {
+				const sendCodeButton = document.querySelector("#SendCode");
+				sendCodeButton.value = `${curCount}秒后再获取`;
+			};
+			
+		</script>
+		
+	</body>
+</html>
