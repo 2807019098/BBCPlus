@@ -18,35 +18,35 @@
         <title>BBC激活PLUS</title>
 	</head>
 	<body>
-		<div class="container" home>
+		<div class="container" employee>
 			<header></header>
 			<section class="main">
-				<img src="images/introduce-bg.png" />
+				<img src="images/employee.png" />
 				<div id="dialogBox"></div>
+                <div id="companyBox"></div>
 			</section>
 		</div>
-		
+
 		<template id="temp">
 			<div class="dialogBox">
-				<section>
-					<div class="line-box flex-row-justify-start">
-						<div class="input">
-							<input class="regInput" id="mobile" type="tel" maxlength="11" placeholder="请输入您的手机号" />
-							<span></span>
-						</div>
-					</div>
-					<div class="line-box flex-row-justify-start">
-						<div class="input">
-							<input class="regInput" id="sms" type="text" placeholder="请输入验证码" />
-							<span></span>
-						</div>
-						<input class="sms-button" id="SendCode" type="button" value="获取验证码" onclick="checkSms()" />
-					</div>
-					<div class="line-box flex-row-justify-start">
-						<button class="login-button flex-row-center" type="button" disabled id="login-button" onclick="getSubmit()">提交</button>
-					</div>
-				</section>
-				<div class="line-bottom flex-row-justify-start">
+                <section>
+                    <div class="line-box flex-row-justify-start">
+                        <div class="input">
+                            <input class="regInput" id="employeeID" type="text" placeholder="请输入您的员工号" />
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="line-box flex-row-justify-start">
+                        <div class="input">
+                            <input class="regInput" id="companyName" type="text" placeholder="请输入公司名称" readonly />
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="line-box flex-row-justify-start">
+                        <button class="login-button flex-row-center" type="button" disabled id="login-button" onclick="getSubmit()">提交</button>
+                    </div>
+                </section>
+                <div class="line-bottom flex-row-justify-start">
 					<div class="checkbox-group">
 						<input type="checkbox" value="" id="checkbox" />
 					</div>
@@ -61,6 +61,19 @@
 					</div>
 				</div>
 			</div>
+
+            <div class="articleBox" id="articleBox">
+                <div class="close" id="articleClose" onclick="articleClose()"></div>
+                <div class="warp">
+                    <div class="input-box">
+                        <input type="text" placeholder="请输入公司名称" id="search" />
+                        <div class="search-btn">搜索</div>
+                    </div>
+                    <div class="listbox">
+                        <!-- <div class="li"></div> -->
+                    </div>
+                </div>
+            </div>
 		</template>
 		<script src="js/jquery-3.1.1.min.js"></script>
 		<script src="js/common.js"></script>
@@ -68,7 +81,7 @@
 			import { MHead, GoBack } from "./compontents/header/index.js";
 			import { Loading } from "./compontents/loading/index.js";
 			
-			const title = "激活PLUS会员享权益";
+			const title = "员工号";
 			document.querySelector("header").innerHTML = `${MHead(title)}`;
 			document.querySelector("header a").onclick = function () {
 				GoBack();
@@ -90,17 +103,44 @@
 			}, { passive: false });
 
 			const myTemplate = () => { 
+                
 				const template = document.querySelector("#temp");
 				if (template) {
 					const clone = template.content.cloneNode(true);
 					const dialogBox = document.querySelector("#dialogBox");
 					if (dialogBox) {
 						dialogBox.appendChild(clone);
+                        document.querySelector("#articleBox .listbox").addEventListener('touchmove', function (e) {
+                            e.stopPropagation();
+                        }, { passive: true });
+
+                        // 静态页面示例
+                        (() => {
+                            for (let i = 1; i < 30; i++) {
+                                var divElement = document.createElement("div");
+                                divElement.className = "li";
+                                divElement.textContent = `公司名称${i}`;
+                                document.querySelector("#articleBox .listbox").appendChild(divElement);
+                                divElement.addEventListener("click", function(e) {
+                                    articleClose();
+                                    document.querySelector("#companyName").value = e.target.innerText;
+                                });
+                            }
+                        })();
+
 					}
 				}
 			};
 
 			myTemplate();
+
+            document.querySelector("#companyName").addEventListener('click', function () {
+                document.querySelector("#articleBox").classList.add("select");
+            });
+
+            const articleClose = () => {
+                document.querySelector("#articleBox").classList.remove('select');
+            };
 
 			const inputLi = document.querySelectorAll(".regInput");
 
@@ -110,7 +150,6 @@
 				
 				dom.addEventListener("focus", function () {
 					this.parentElement.parentElement.classList.add("select");
-					console.log(this.value)
 					let value = this.value;
 					if (value !== "") {
 						this.nextElementSibling.style.display = 'flex';
@@ -132,11 +171,10 @@
 
 				dom.addEventListener("input", function () {
 					let value = this.value;
-					let mobile = document.querySelector("#mobile").value;
-					let phonereg = /^(((13[0-9]{1})|(15[0-9]{1})|(16[6]{1})|(17[0-9]{1})|(18[0-9]{1})|(19[8-9]{1}))+\d{8})$/;
-					let sms = document.querySelector("#sms").value;
+					let employeeID = document.querySelector("#employeeID").value;
+					let companyName = document.querySelector("#companyName").value;
 					
-					if (mobile !== "" && sms !== "" && phonereg.test(mobile)) {
+					if (employeeID !== "" && companyName !== "") {
 						document.querySelector("#login-button").removeAttribute("disabled");
 					} else {
 						document.querySelector("#login-button").setAttribute("disabled", true);
@@ -159,7 +197,7 @@
 				
 			});
 
-			document.querySelector("#checkbox").addEventListener('change', function (event) {
+            document.querySelector("#checkbox").addEventListener('change', function (event) {
 				document.querySelector("#checkbox").classList.remove("checkFocus");
 				if (Boolean(event.target.checked)) {
 					this.setAttribute("checked", '');
@@ -168,22 +206,8 @@
 				}
 			});
 
-			const checkSms = Throttle(() => {
-				let mobile = $("#mobile").val();
-				let phonereg = /^(((13[0-9]{1})|(15[0-9]{1})|(16[6]{1})|(17[0-9]{1})|(18[0-9]{1})|(19[8-9]{1}))+\d{8})$/;
-				
-				if (mobile === ""){
-					Toast('请输入您的手机号', 1000);
-				} else if (!phonereg.test(mobile)){
-					Toast('手机号码不正确，请重新输入', 1000);
-				} else {
-					sendInfo();
-				}
-
-			}, 1500);
-
 			const getSubmit = Throttle(() => {
-				const checkBtn = document.querySelector('#checkbox');
+                const checkBtn = document.querySelector('#checkbox');
 				if (checkBtn.checked) {
 					waitLoading();
 				} else {
@@ -243,58 +267,6 @@
 				loginBtn.style.backgroundColor = "var(--rv-button-background-color)";
 			};
 
-			/**
-			 *短信验证码
-			 *
-			 */
-			let InterValObj; //定时器变量，控制时间
-			const count = 60; //间隔函数，1秒执行
-			let curCount;//当前剩余秒数
-			let code = ""; //验证码
-			const codeLength = 6;//验证码长度
-
-			const sendInfo = () => {
-				curCount = count;
-				generateCode();
-    			disableSendButton();
-				InterValObj = window.setInterval(setResetTime, 1000);
-			};
-
-			const generateCode = () => {
-				code = "";
-				for (let i = 0; i < codeLength; i++) {
-					code += parseInt(Math.random() * 9).toString();
-				}
-			};
-
-			const disableSendButton = () => {
-				const sendCodeButton = document.querySelector("#SendCode");
-				sendCodeButton.setAttribute("disabled", true);
-				sendCodeButton.value = `${curCount}秒后再获取`;
-			};
-
-			const enableSendButton = () => {
-				const sendCodeButton = document.querySelector("#SendCode");
-				sendCodeButton.removeAttribute("disabled");
-				sendCodeButton.value = '获取验证码';
-			};
-			
-			const setResetTime = () => {
-				if (curCount === 0) {                
-					clearInterval(InterValObj);
-					enableSendButton();
-        			code = "";
-				}else {
-					curCount--;
-        			updateSendButtonText();
-				}
-			}
-
-			const updateSendButtonText = () => {
-				const sendCodeButton = document.querySelector("#SendCode");
-				sendCodeButton.value = `${curCount}秒后再获取`;
-			};
-			
 		</script>
 		
 	</body>

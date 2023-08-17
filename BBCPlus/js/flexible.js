@@ -1,3 +1,14 @@
+/*
+ * @Author: zk.zhouyf
+ * @Date: 2023-08-15 11:19:11
+ * @LastEditors: zk.zhouyf
+ * @LastEditTime: 2023-08-17 15:11:16
+ * @FilePath: \BBCPlus\BBCPlus\js\flexible.js
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by zk.zhouyf, All Rights Reserved. 
+ */
+
 /**
  * 可伸缩布局方案
  * rem计算方式：设计图尺寸px / 100 = 实际rem  例: 100px = 1rem

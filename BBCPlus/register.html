@@ -18,56 +18,67 @@
         <title>BBC激活PLUS</title>
 	</head>
 	<body>
-		<div class="container" membership>
+		<div class="container" register>
 			<header></header>
 			<section class="main">
-				<div class="tips-txt">为了保障您的付费会员权益，需要您完善以下信息：</div>
-				<div id="dialogBox"></div>
+				<div class="main-content">
+                    <div class="warp-top">
+                        <div class="logo">
+                            <img src="images/logo.png" />
+                        </div>
+                        <div class="text-content">
+                            <h2>注册麦德龙会员卡</h2>
+                            <h3>Register my METRO card</h3>
+                        </div>
+                    </div>
+                    <div class="warp-center">
+                        <h2>请输入身份证上的姓名，以保障您的权益</h2>
+                        <h3>Please enter your ID name, to ensure your benefit</h3>
+                    </div>
+				    <div id="dialogBox"></div>
+                </div>
+                <div class="reg-btn flex-row-justify-start">
+					<button class="login-button flex-row-center" type="button" id="login-button" onclick="getSubmit()">立即注册</button>
+				</div>
 			</section>
 		</div>
-		
+        
 		<template id="temp">
 			<div class="dialogBox">
 				<section>
 					<div class="line-box flex-row-justify-start">
 						<div class="input">
-							<b>姓</b>
-							<input class="regInput" id="lastName" type="text" placeholder="请输入您的姓" />
-							<span></span>
+							<input class="regInput" id="lastName" type="text" placeholder="请输入您的姓" open />
 						</div>
 					</div>
 					<div class="line-box flex-row-justify-start">
 						<div class="input">
-							<b>名</b>
-							<input class="regInput" id="firstName" type="text" placeholder="请输入您的名" />
-							<span></span>
+							<input class="regInput" id="firstName" type="text" placeholder="请输入您的名" open />
 						</div>
 					</div>
 					<div class="line-box flex-row-justify-start">
 						<div class="input">
-							<b>手机号</b>
 							<input class="regInput" id="mobile" type="tel" value="18912348900" maxlength="11" placeholder="请输入您的手机号" readonly />
-							<span></span>
 						</div>
 					</div>
 					<div class="line-box flex-row-justify-start">
 						<div class="input">
-							<b>身份证</b>
-							<input class="regInput" id="identityCard" type="text" maxlength="18" placeholder="请输入您的身份证号" />
-							<span></span>
+							<input class="regInput" type="text" value="身份证" readonly />
 						</div>
 					</div>
 					<div class="line-box flex-row-justify-start">
 						<div class="input">
-							<b>开通商场</b>
-							<input class="regInput" id="mobile" type="text" value="上海普陀商场" maxlength="11" placeholder="请选择开通商场" readonly />
-							<span></span>
+							<input class="regInput" id="identityCard" type="text" value="" maxlength="18" placeholder="请输入证件号码" open />
+						</div>
+					</div>
+					<div class="line-box flex-row-justify-start">
+						<div class="input">
+							<input class="regInput" id="store" type="text" value="" placeholder="开通商场" readonly open />
 						</div>
 					</div>
 				</section>
-				<div class="line-btn flex-row-justify-start">
-					<button class="login-button flex-row-center" type="button" id="login-button" onclick="getSubmit()">确认信息并继续开通</button>
-				</div>
+				
+                <div class="desc-txt">*身份信息仅用于找回会员对应的积分和优惠</div>
 				<div class="line-bottom flex-row-justify-start">
 					<div class="checkbox-group">
 						<input type="checkbox" value="" id="checkbox" />
@@ -82,15 +93,17 @@
 						</div>
 					</div>
 				</div>
+                
 			</div>
 		</template>
 		<script src="js/jquery-3.1.1.min.js"></script>
+        <script src="js/mobileSelect.js"></script>
 		<script src="js/common.js"></script>
 		<script type="module">
 			import { MHead, GoBack } from "./compontents/header/index.js";
 			import { Loading } from "./compontents/loading/index.js";
 			
-			const title = "麦德龙付费会员开通";
+			const title = "注册会员";
 			document.querySelector("header").innerHTML = `${MHead(title)}`;
 			document.querySelector("header a").onclick = function () {
 				GoBack();
@@ -124,50 +137,18 @@
 
 			myTemplate();
 
-			const inputLi = document.querySelectorAll(".regInput:not([readonly])");
-
-			let clearInput = false;
+			const inputLi = document.querySelectorAll(".regInput[open]");
 
 			inputLi.forEach(dom => {
 				
 				dom.addEventListener("focus", function () {
 					this.parentElement.parentElement.classList.add("select");
-					let value = this.value;
-					if (value !== "") {
-						this.nextElementSibling.style.display = 'flex';
-					} else {
-						this.nextElementSibling.style.display = 'none';
-					}
 				});
 
 				dom.addEventListener("blur", function () {
 					this.parentElement.parentElement.classList.remove("select");
-					setTimeout(() => {
-						if (!clearInput) {
-							this.nextElementSibling.style.display = 'none';
-						}
-						clearInput = false;
-					}, 100)
-					
 				});
 
-				dom.addEventListener("input", function () {
-					let value = this.value;
-					if (value !== "") {
-						this.nextElementSibling.style.display = 'flex';
-					} else {
-						this.nextElementSibling.style.display = 'none';
-					}
-
-				});
-
-				dom.nextElementSibling.addEventListener('click', function (event) {
-					this.previousElementSibling.value = '';
-					this.style.display = 'none';
-					clearInput = true;
-					event.stopPropagation();
-				})
-				
 			});
 
 			document.querySelector("#checkbox").addEventListener('change', function (event) {
@@ -179,12 +160,80 @@
 				}
 			});
 
+            const mobileSelect = new MobileSelect({
+                trigger: '#store',
+                title: '选择商场',
+                wheels: [{ 
+                    data: [
+                        {
+                            id: 340000,
+                            value: "安徽省",
+                            childs: [
+                                {
+                                    id: 340500, 
+                                    value: "马鞍山",
+                                    childs: [
+                                        {
+                                            id: "234", 
+                                            value: "马鞍山花山店"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            id: 110000,
+                            value: "北京",
+                            childs: [
+                                {
+                                    id: 110100, 
+                                    value: "北京",
+                                    childs: [
+                                        {
+                                            id: "237", 
+                                            value: "大成路店"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            id: 420000,
+                            value: "湖北省",
+                            childs: [
+                                {
+                                    id: 420100, 
+                                    value: "武汉",
+                                    childs: [
+                                        {
+                                            id: "23", 
+                                            value: "武汉洪山商场"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }],
+                transitionEnd: function (indexArr, data) {
+                    console.log(data);
+                },
+                callback: function (indexArr, data) {
+                    if (data.length > 0) {
+                        document.querySelector("#store").value = data[2].value;
+                    } else {
+                        document.querySelector("#store").value = "";
+                    }
+                }
+            });
+
 			const getSubmit = Throttle(() => {
 				let lastName = document.querySelector("#lastName").value;
 				let firstName = document.querySelector("#firstName").value;
 				let identityCard = document.querySelector("#identityCard").value;
 				let idreg = /^[1-9][0-9]{5}(19|20)[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}([0-9]|x|X)$/;
-				const checkBtn = document.querySelector('#checkbox');
+				let store = document.querySelector("#store").value;
+                const checkBtn = document.querySelector('#checkbox');
 
 				if (lastName === "") {
 					Toast('姓不能为空，请填写', 1000);
@@ -198,6 +247,9 @@
 				} else if (!idreg.test(identityCard)) {
 					Toast('身份证号不正确，请重新填写', 1000);
 					document.querySelector("#identityCard").focus();
+				} else if (store === "") {
+					Toast('请选择开通商场', 1000);
+					document.querySelector("#store").focus();
 				} else if (checkBtn.checked === false) {
 					Toast('请勾选并同意协议', 1000);
 					document.querySelector("#checkbox").classList.add("checkFocus");
@@ -209,7 +261,7 @@
 			const waitLoading = () => {
 				const loginBtn = document.querySelector("#login-button");
 				loginBtn.setAttribute('disabled', true);
-				loginBtn.textContent = "确认信息并继续开通";
+				loginBtn.textContent = "立即注册";
 				loginBtn.appendChild(loading());
 				loginBtn.style.backgroundColor = "rgb(0 91 172 / 70%)";
 				setPost();
@@ -254,7 +306,7 @@
 			const waitEnd = () => {
 				const loginBtn = document.querySelector("#login-button");
 				loginBtn.removeAttribute("disabled");
-				loginBtn.textContent = "确认信息并继续开通";
+				loginBtn.textContent = "立即注册";
 				loginBtn.style.backgroundColor = "var(--rv-button-background-color)";
 			};
 

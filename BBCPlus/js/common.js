@@ -1,12 +1,12 @@
 /*
- * @Author: zk.zhouyf zhouyf@zhikaisoft.com
+ * @Author: zk.zhouyf
  * @Date: 2023-08-15 19:50:42
- * @LastEditors: zk.zhouyf zhouyf@zhikaisoft.com
- * @LastEditTime: 2023-08-17 12:40:48
+ * @LastEditors: zk.zhouyf
+ * @LastEditTime: 2023-08-17 15:11:43
  * @FilePath: \BBCPlus\BBCPlus\js\common.js
  * @Description: 
  * 
- * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
+ * Copyright (c) 2023 by zk.zhouyf, All Rights Reserved. 
  */
 
 /**
