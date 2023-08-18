@@ -526,6 +526,7 @@ dialog[toast] {
     padding: 10px 15px;
     border-radius: 8px;
     white-space: nowrap;
+    z-index: 1000;
 }
 
 .dialog {
@@ -543,6 +544,7 @@ dialog[toast] {
     flex-direction: column;
     align-items: center;
     font-size: 0;
+    z-index: 1000;
 
     h2 {
         padding: 0px 20px;
