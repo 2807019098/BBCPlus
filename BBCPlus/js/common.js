@@ -2,7 +2,7 @@
  * @Author: zk.zhouyf
  * @Date: 2023-08-15 19:50:42
  * @LastEditors: zk.zhouyf
- * @LastEditTime: 2023-08-17 15:11:43
+ * @LastEditTime: 2023-08-18 17:15:19
  * @FilePath: \BBCPlus\BBCPlus\js\common.js
  * @Description: 
  * 
@@ -75,7 +75,7 @@ const Dialog = (options) => {
     div.appendChild(div3);
     dialog.id = 'dialog';
     dialog.style.position = 'fixed';
-    dialog.style.backgroundColor = 'rgba(127, 127, 127, 1)';
+    dialog.style.backgroundColor = 'rgba(127, 127, 127, .7)';
     dialog.style.width = window.innerWidth + 'px';
     dialog.style.height = window.innerHeight + 'px';
     dialog.style.left = '0';
@@ -103,4 +103,71 @@ const Dialog = (options) => {
         }
         document.body.removeChild(dialog);
     });
+};
+
+
+/**
+ *小程序弹窗
+ *
+ * @param {*} options
+ */
+ const MiniprogramDialog = (options) => {
+    const elementTag = typeof HTMLDialogElement === 'function' ? 'dialog' : 'div';
+    const dialog = document.createElement(elementTag);
+    const div = document.createElement("div");
+    const h2 = document.createElement("h2");
+    const div2 = document.createElement("div");
+    const div3 = document.createElement("div");
+    document.body.appendChild(dialog);
+    dialog.appendChild(div);
+    div.appendChild(h2);
+    div.appendChild(div2);
+    div.appendChild(div3);
+    dialog.id = 'dialog';
+    dialog.style.position = 'fixed';
+    dialog.style.backgroundColor = 'rgba(127, 127, 127, .7)';
+    dialog.style.width = window.innerWidth + 'px';
+    dialog.style.height = window.innerHeight + 'px';
+    dialog.style.left = '0';
+    dialog.style.top = '0';
+    dialog.style.zIndex = '1000000';
+    dialog.style.color = '#333333';
+    dialog.style.fontSize = '14px';
+    dialog.style.padding = '0';
+    dialog.style.margin = '0';
+    dialog.style.border = '0';
+    dialog.style.outline = '0';
+    div.className = 'dialog';
+    div2.className = 'content';
+    div3.className = 'btn';
+    if (elementTag === 'dialog') {
+        dialog.show();
+    }
+    h2.innerText = options.title || "";
+    div2.innerHTML = options.content || "";
+
+    if (dialog) {
+        const node = document.querySelector(options.dom).cloneNode(true)
+        div3.appendChild(node);
+    }
+
+};
+
+const privacyPolicy = (url) => {
+    noteBody();
+    $("#nodeContent").load(url,"",function(){
+        
+    })
+};
+
+const noteBody = () => {
+    $("#noteBody").animate({
+        top:'0'
+    },300)
+};
+
+const closeNote = () => {
+    $("#noteBody").animate({
+        top:'100%'
+    },300)
 };

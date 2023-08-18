@@ -60,3 +60,9 @@ Dialog({
         // 
     },
 })
+
+MiniprogramDialog({
+    title: '提 示',
+    content: `<p>活动成功</p>`,
+    dom: '#wechat-web-container'
+})

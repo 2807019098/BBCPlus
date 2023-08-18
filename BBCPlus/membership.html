@@ -25,7 +25,7 @@
 				<div id="dialogBox"></div>
 			</section>
 		</div>
-		
+
 		<template id="temp">
 			<div class="dialogBox">
 				<section>
@@ -72,23 +72,31 @@
 					<div class="checkbox-group">
 						<input type="checkbox" value="" id="checkbox" />
 					</div>
-					<div class="line-bottom-desc">
+					<div class="line-bottom-desc" agreement>
 						<div class="info">
-							<span>点击即同意</span>
-							<a href="">《麦德龙会员协议》</a>
-							<a href="">《麦德龙个人信息保护及隐私政策》</a>
-							<a href="">《麦德龙授权协议》</a>
-							<a href="">《麦德龙儿童个人信息保护规则及监护人须知》</a>
-						</div>
+                            <span>点击即同意</span>
+                            <a href="javascript: privacyPolicy('privacyPolicy1.html .container')">《麦德龙会员协议》</a>
+                            <a href="javascript: privacyPolicy('privacyPolicy2.html .container')">《麦德龙个人信息保护及隐私政策》</a>
+                            <a href="javascript: privacyPolicy('privacyPolicy3.html .container')">《麦德龙授权协议》</a>
+                            <a href="javascript: privacyPolicy('privacyPolicy4.html .container')">《麦德龙儿童个人信息保护规则及监护人须知》</a>
+                        </div>
 					</div>
 				</div>
 			</div>
+			<div class="noteBody" id="noteBody">
+                <h2 class="noteHead">
+                    <div class="closeNote" onclick="closeNote()">关闭</div>
+                </h2>
+                <div class="nodeContent" id="nodeContent"></div>
+            </div>
 		</template>
 		<script src="js/jquery-3.1.1.min.js"></script>
+		<script src="js/mobile-keyboard.min.js"></script>
 		<script src="js/common.js"></script>
 		<script type="module">
 			import { MHead, GoBack } from "./compontents/header/index.js";
 			import { Loading } from "./compontents/loading/index.js";
+			import { Agreement } from "./compontents/agreement/index.js";
 			
 			const title = "麦德龙付费会员开通";
 			document.querySelector("header").innerHTML = `${MHead(title)}`;
@@ -102,6 +110,8 @@
 				return html;
 			};
 			
+			document.querySelector("[agreement]").innerHTML = `${Agreement()}`;
+
 			window.loading = loading;
 		</script>
 		<script>
@@ -177,6 +187,12 @@
 				} else {
 					this.removeAttribute("checked");
 				}
+			});
+
+			const idcardDom = document.querySelector("#identityCard");
+
+			idcardDom.addEventListener('click', function () {
+				$("#identityCard").mobileKeyboard({type: 2});
 			});
 
 			const getSubmit = Throttle(() => {
