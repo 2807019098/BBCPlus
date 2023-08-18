@@ -127,6 +127,14 @@
                                 divElement.addEventListener("click", function(e) {
                                     articleClose();
                                     document.querySelector("#companyName").value = e.target.innerText;
+
+                                    let employeeID = document.querySelector("#employeeID").value;
+					                let companyName = document.querySelector("#companyName").value;
+                                    if (employeeID !== "" && companyName !== "") {
+                                        document.querySelector("#login-button").removeAttribute("disabled");
+                                    } else {
+                                        document.querySelector("#login-button").setAttribute("disabled", true);
+                                    }
                                 });
                             }
                         };
@@ -218,6 +226,7 @@
 
 				dom.nextElementSibling.addEventListener('click', function (event) {
 					this.previousElementSibling.value = '';
+                    document.querySelector("#login-button").setAttribute("disabled", true);
 					this.style.display = 'none';
 					clearInput = true;
 					event.stopPropagation();
@@ -235,12 +244,16 @@
 			});
 
 			const getSubmit = Throttle(() => {
+                const employeeID = document.querySelector('#employeeID').value;
+                const employeeReg = /^[a-zA-Z0-9]{1,8}$/;
                 const checkBtn = document.querySelector('#checkbox');
-				if (checkBtn.checked) {
-					waitLoading();
-				} else {
-					Toast('请勾选并同意协议', 1000);
+                if (!employeeReg.test(employeeID)) {
+                    Toast('请输入正确格式的激活码', 1000);
+                }  else if (!checkBtn.checked) {
+                    Toast('请勾选并同意协议', 1000);
 					document.querySelector("#checkbox").classList.add("checkFocus");
+				} else {
+					waitLoading();
 				}
 			}, 1500);
 

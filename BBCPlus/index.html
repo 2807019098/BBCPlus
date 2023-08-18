@@ -158,6 +158,7 @@
 
 				dom.nextElementSibling.addEventListener('click', function (event) {
 					this.previousElementSibling.value = '';
+					document.querySelector("#login-button").setAttribute("disabled", true);
 					this.style.display = 'none';
 					clearInput = true;
 					event.stopPropagation();
