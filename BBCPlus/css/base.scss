@@ -948,6 +948,7 @@ dialog[toast] {
 	top: 100%;
 	background: #FFFFFF;
 	z-index: 9999;
+    opacity: 0;
 }
 .noteHead{
 	font-size: 0.28rem;
@@ -965,6 +966,8 @@ dialog[toast] {
 .container[home] {
     width: 100%;
     min-height: 100vh;
+    position: relative;
+    z-index: 1;
 
     header {
         position: sticky;
@@ -1022,6 +1025,7 @@ dialog[toast] {
         overflow: auto;
         -webkit-overflow-scrolling: touch;
         position: relative;
+        z-index: 30000000;
 
         .dialogBox {
             width: calc(100% - 20px);
@@ -2316,11 +2320,23 @@ dialog[toast] {
                     height: calc(100% - 65px);
                     overflow: auto;
                     -webkit-overflow-scrolling: touch;
+                    position: relative;
                     
                     .li {
                         padding: 10px 0;
                         border-bottom: 1px solid var(--rv-gray);
                         box-sizing: border-box;
+                    }
+
+                    .cli{
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-direction: column;
                     }
                 }
             }
@@ -2340,6 +2356,7 @@ dialog[toast] {
     height: 100vh;
     -webkit-overflow-scrolling: touch;
     overflow: auto;
+    padding-bottom: 30px;
 
     .privacyPolicy {
         padding: 0.2rem 0;

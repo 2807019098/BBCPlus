@@ -2,7 +2,7 @@
  * @Author: zk.zhouyf
  * @Date: 2023-08-15 19:50:42
  * @LastEditors: zk.zhouyf
- * @LastEditTime: 2023-08-18 17:15:19
+ * @LastEditTime: 2023-08-18 18:40:09
  * @FilePath: \BBCPlus\BBCPlus\js\common.js
  * @Description: 
  * 
@@ -155,19 +155,44 @@ const Dialog = (options) => {
 
 const privacyPolicy = (url) => {
     noteBody();
+    
+    document.querySelector("#noteBody").addEventListener('touchmove', function (e) {
+        e.stopPropagation();
+    }, { passive: true });
     $("#nodeContent").load(url,"",function(){
         
     })
 };
 
 const noteBody = () => {
+
+    document.querySelector("#noteBody").addEventListener('touchmove', function (e) {
+        e.stopPropagation();
+    }, { passive: true });
+
     $("#noteBody").animate({
         top:'0'
-    },300)
+    },300);
+    $("#noteBody").css('opacity', 1);
 };
 
 const closeNote = () => {
-    $("#noteBody").animate({
-        top:'100%'
-    },300)
+
+    document.body.addEventListener('touchmove', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }, { passive: false });
+
+    let a = new Promise((resolve, reject) => {
+        $("#noteBody").animate({
+            top:'100%'
+        },300);
+    });
+
+    return a;
+    
 };
+
+closeNote().then(function(data) {
+    $("#noteBody").css('opacity', 0)
+})
