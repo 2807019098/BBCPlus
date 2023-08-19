@@ -2,7 +2,7 @@
  * @Author: zk.zhouyf
  * @Date: 2023-08-15 19:50:42
  * @LastEditors: zk.zhouyf
- * @LastEditTime: 2023-08-18 18:40:09
+ * @LastEditTime: 2023-08-19 17:56:10
  * @FilePath: \BBCPlus\BBCPlus\js\common.js
  * @Description: 
  * 
@@ -146,12 +146,31 @@ const Dialog = (options) => {
     h2.innerText = options.title || "";
     div2.innerHTML = options.content || "";
 
-    if (dialog) {
-        const node = document.querySelector(options.dom).cloneNode(true)
-        div3.appendChild(node);
+
+     if (dialog) {
+        const node = document.querySelector(options.dom).cloneNode(true);
+
+        const updateMinni = () => {
+            return new Promise((resolve, reject) => {
+                div3.appendChild(node);
+                node.classList.add('active');
+                resolve();
+            })
+        };
+
+        (async () => {
+            try {
+                const step = await updateMinni();
+            } catch (error) {
+                
+            }
+        })();
+        
     }
 
 };
+
+
 
 const privacyPolicy = (url) => {
     noteBody();
@@ -176,23 +195,27 @@ const noteBody = () => {
     $("#noteBody").css('opacity', 1);
 };
 
-const closeNote = () => {
-
-    document.body.addEventListener('touchmove', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }, { passive: false });
-
-    let a = new Promise((resolve, reject) => {
+const getTop = () => {
+    return new Promise((resolve, reject) => {
         $("#noteBody").animate({
             top:'100%'
         },300);
-    });
-
-    return a;
-    
+    })
 };
 
-closeNote().then(function(data) {
-    $("#noteBody").css('opacity', 0)
-})
+const getOpacity = () => {
+    return new Promise((resolve, reject) => {
+        $("#noteBody").css('opacity', 0);
+    })
+};
+
+const closeNote = async () => {
+    try {
+        
+        const step1 = await getTop();
+        const step2 = await getOpacity();
+        
+    } catch (error) {
+        
+    }
+};

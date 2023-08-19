@@ -921,11 +921,11 @@ dialog[toast] {
   background-color: transparent;
 }
 
-[data-code=x] {
+[data-code=X] {
   margin-right: 8px;
 }
 
-.mobile-keyboard_main-item[data-code=x] {
+.mobile-keyboard_main-item[data-code=X] {
   margin-right: 8px;
 }
 
