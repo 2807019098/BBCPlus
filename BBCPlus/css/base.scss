@@ -285,6 +285,7 @@ body {
     padding-top: env(safe-area-inset-top);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 a,
@@ -970,6 +971,7 @@ dialog[toast] {
     min-height: 100vh;
     position: relative;
     z-index: 1;
+    background-color: var(--rv-blue);
 
     header {
         position: sticky;
@@ -1944,6 +1946,7 @@ dialog[toast] {
 .container[employee] {
     width: 100%;
     min-height: 100vh;
+    background-color: var(--rv-blue);
 
     header {
         position: sticky;

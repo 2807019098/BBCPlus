@@ -975,6 +975,7 @@ dialog[toast] {
   min-height: 100vh;
   position: relative;
   z-index: 1;
+  background-color: var(--rv-blue);
 }
 .container[home] header {
   position: sticky;
@@ -1800,6 +1801,7 @@ dialog[toast] {
 .container[employee] {
   width: 100%;
   min-height: 100vh;
+  background-color: var(--rv-blue);
 }
 .container[employee] header {
   position: sticky;
